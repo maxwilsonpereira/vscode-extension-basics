@@ -202,7 +202,7 @@ export async function activate(context: vscode.ExtensionContext) {
           currentPanel.reveal(vscode.ViewColumn.One);
         } else {
           currentPanel = vscode.window.createWebviewPanel(
-            "vscode-extension", // identifies the type of the webview. Used internally
+            "vscode-extension", // identifies the type of the webview (used internally)
             "Extension to Webview Prepare", // title of the panel displayed to the user
             vscode.ViewColumn.One,
             {
@@ -238,6 +238,43 @@ export async function activate(context: vscode.ExtensionContext) {
         // window.addEventListener('message', event => {
         // const message = event.data.message;
         // const command = event.data.command;
+      }
+    )
+  );
+
+  // passing messages with acquireVsCodeApi() to a webview that will receive it with
+  // webview.onDidReceiveMessage()
+  // For security reasons, you must keep the VS Code API object private and make sure
+  // it is never leaked into the global scope.
+  // https://code.visualstudio.com/api/extension-guides/webview#passing-messages-from-a-webview-to-an-extension
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "vscode-extension.webviewToExtension",
+      () => {
+        const panel = vscode.window.createWebviewPanel(
+          "vscode-extension", // identifies the type of the webview (used internally)
+          "Webview to Extension", // title of the panel displayed to the user
+
+          vscode.ViewColumn.One,
+          {
+            enableScripts: true,
+          }
+        );
+        panel.webview.html = getWebviewContent("Coding Cat");
+
+        // handle messages from the webview
+        panel.webview.onDidReceiveMessage(
+          (message) => {
+            switch (message.command) {
+              case "alert":
+                vscode.window.showErrorMessage(message.text);
+                return;
+            }
+          },
+          undefined,
+          context.subscriptions
+        );
       }
     )
   );

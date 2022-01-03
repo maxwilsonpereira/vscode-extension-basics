@@ -21,6 +21,7 @@ export function getWebviewContent(cat: string) {
               counter.textContent = count++;
           }, 200);
     
+          // ***** EXTENSION TO WEBVIEW *****
           const messageReceived = document.getElementById('message-received');
           window.addEventListener('message', event => {
             const message = event.data;
@@ -32,6 +33,14 @@ export function getWebviewContent(cat: string) {
                 break;
               }
           });
+
+          // ***** WEBVIEW TO EXTENSION *****
+          const vscode = acquireVsCodeApi();
+          vscode.postMessage({
+            command: 'alert',
+            text: '🐛  on line ' + count
+          })
+
         </script>
       </body>
     </html>`;

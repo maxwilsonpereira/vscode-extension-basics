@@ -18,7 +18,8 @@
     "onCommand:vscode-extension.webviewUpdate",
     "onCommand:vscode-extension.webviewShowLocalData",
     "onCommand:vscode-extension.extensionToWebviewPrepare",
-    "onCommand:vscode-extension.extensionToWebviewExecute"
+    "onCommand:vscode-extension.extensionToWebviewExecute",
+    "onCommand:vscode-extension.webviewToExtension"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -67,6 +68,11 @@
         "command": "vscode-extension.extensionToWebviewExecute",
         "category": "MaxExtension",
         "title": "Extension to Webview Execute"
+      },
+      {
+        "command": "vscode-extension.webviewToExtension",
+        "category": "MaxExtension",
+        "title": "Webview to Extension"
       }
     ]
   },
